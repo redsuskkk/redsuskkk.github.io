@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +7,89 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <label for="ho-ten">Họ và tên:</label>
-    <input type="text" id="ho-ten" name="ho-ten"><br><br>
-    <label for="ngay-sinh">Ngày sinh:</label>
-    <input type="date" id="ngay-sinh" name="ngay-sinh"><br><br>
-    <label for="gioi-tinh">Giới tính:</label>
-    <input type="radio" id="nam" name="gioi-tinh" value="Nam">
-    <label for="nam">Nam</label>
-    <input type="radio" id="nu" name="gioi-tinh" value="Nữ">
-    <label for="nu">Nữ</label><br><br>
-    <label for="so-thich">Sở thích:</label>
-    <input type="checkbox" id="doc-sach" name="so-thich" value="Đọc sách">
-    <label for="doc-sach">Đọc sách</label>
-    <input type="checkbox" id="nghe-nhac" name="so-thich" value="Nghe nhạc">
-    <label for="nghe-nhac">Nghe nhạc</label><br><br>
-    <label for="dia-chi">Địa chỉ:</label>
-    <select id="tinh" name="tinh"></select>
-    <select id="huyen" name="huyen"></select>
-    <select id="xa" name="xa"></select><br><br>
-    <img src="image.png" alt="Ảnh">
-    <audio id="audio" src="sound.mp3" volume="0.1" autoplay></audio>
+    <div class="container">
+        <h1>🧑 Giới thiệu bản thân</h1>
+        
+        <div class="form-group">
+            <label for="ho-ten">👤 Họ và tên:</label>
+            <input type="text" id="ho-ten" name="ho-ten" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ngay-sinh">📅 Ngày sinh:</label>
+            <input type="date" id="ngay-sinh" name="ngay-sinh" required>
+        </div>
+
+        <div class="form-group">
+            <label>⚤ Giới tính:</label>
+            <div>
+                <input type="radio" id="nam" name="gioi-tinh" value="Nam">
+                <label for="nam">Nam</label>
+                <input type="radio" id="nu" name="gioi-tinh" value="Nữ">
+                <label for="nu">Nữ</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>❤️ Sở thích:</label>
+            <div class="hobbies-container">
+                <div class="hobby-item">
+                    <input type="checkbox" id="doc-sach" name="so-thich" value="Đọc sách">
+                    <label for="doc-sach">📚 Đọc sách</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="nghe-nhac" name="so-thich" value="Nghe nhạc">
+                    <label for="nghe-nhac">🎵 Nghe nhạc</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="xem-phim" name="so-thich" value="Xem phim">
+                    <label for="xem-phim">🎬 Xem phim</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="du-lich" name="so-thich" value="Du lịch">
+                    <label for="du-lich">✈️ Du lịch</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="the-thao" name="so-thich" value="Thể thao">
+                    <label for="the-thao">⚽ Thể thao</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="nau-an" name="so-thich" value="Nấu ăn">
+                    <label for="nau-an">🍳 Nấu ăn</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="choi-game" name="so-thich" value="Chơi game">
+                    <label for="choi-game">🎮 Chơi game</label>
+                </div>
+                <div class="hobby-item">
+                    <input type="checkbox" id="nhiep-anh" name="so-thich" value="Nhiếp ảnh">
+                    <label for="nhiep-anh">📸 Nhiếp ảnh</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>📍 Địa chỉ:</label>
+            <div class="address-group">
+                <select id="tinh" name="tinh" required>
+                    <option value="">Chọn tỉnh/thành</option>
+                </select>
+                <select id="huyen" name="huyen" required>
+                    <option value="">Chọn quận/huyện</option>
+                </select>
+                <select id="xa" name="xa" required>
+                    <option value="">Chọn phường/xã</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="submit-btn" onclick="showResult()">✅ Xong</button>
+            <button id="view-source-btn" onclick="viewSource()">🔍 Xem nguồn trang</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
 
     <script>
         fetch('location.json')
@@ -46,7 +109,8 @@
                 tinhSelect.addEventListener('change', (e) => {
                     const tinhCode = e.target.value;
                     const tinh = data.find(t => t.code == tinhCode);
-                    huyenSelect.innerHTML = '';
+                    huyenSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                    xaSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
                     tinh.districts.forEach(huyen => {
                         const option = document.createElement('option');
                         option.value = huyen.code;
@@ -59,7 +123,7 @@
                     const huyenCode = e.target.value;
                     const tinh = data.find(t => t.districts.find(h => h.code == huyenCode));
                     const huyen = tinh.districts.find(h => h.code == huyenCode);
-                    xaSelect.innerHTML = '';
+                    xaSelect.innerHTML = '<option value="">Chọn phường/xã</option>';
                     huyen.wards.forEach(xa => {
                         const option = document.createElement('option');
                         option.value = xa.code;
@@ -68,6 +132,41 @@
                     });
                 });
             });
+
+        function showResult() {
+            const hoTen = document.getElementById('ho-ten').value;
+            const ngaySinh = document.getElementById('ngay-sinh').value;
+            const gioiTinh = document.querySelector('input[name="gioi-tinh"]:checked')?.value;
+            const soThich = Array.from(document.querySelectorAll('input[name="so-thich"]:checked'))
+                .map(checkbox => checkbox.value);
+            const tinh = document.getElementById('tinh');
+            const huyen = document.getElementById('huyen');
+            const xa = document.getElementById('xa');
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>📝 Thông tin của bạn:</h3>
+                <p><strong>Họ và tên:</strong> ${hoTen}</p>
+                <p><strong>Ngày sinh:</strong> ${ngaySinh}</p>
+                <p><strong>Giới tính:</strong> ${gioiTinh || 'Chưa chọn'}</p>
+                <p><strong>Sở thích:</strong> ${soThich.length ? soThich.join(', ') : 'Chưa chọn'}</p>
+                <p><strong>Địa chỉ:</strong> ${xa.options[xa.selectedIndex]?.text || ''}, ${huyen.options[huyen.selectedIndex]?.text || ''}, ${tinh.options[tinh.selectedIndex]?.text || ''}</p>
+            `;
+        }
+
+        function viewSource() {
+            const sourceWindow = window.open('', '_blank');
+            sourceWindow.document.write('<html><head><title>Source Code</title></head><body>');
+            sourceWindow.document.write('<pre>');
+            sourceWindow.document.write(document.documentElement.outerHTML
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+            );
+            sourceWindow.document.write('</pre></body></html>');
+            sourceWindow.document.close();
+        }
     </script>
 </body>
 </html>
