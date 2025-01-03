@@ -1,26 +1,121 @@
 body {
     font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
 }
 
 label {
-    display: block;
-    margin-bottom: 10px;
+    display: inline-block;
+    min-width: 120px;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-input[type="text"], input[type="date"], select {
+input[type="text"], 
+input[type="date"],
+select {
     width: 100%;
-    height: 30px;
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
 }
 
-input[type="radio"], input[type="checkbox"] {
-    margin-right: 10px;
+.hobbies-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
 }
 
-img {
-    width: 100%;
-    height: 200px;
-    object-radius: 10px;
+.hobby-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.address-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#submit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#view-source-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: none;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* 😅😅😅😅 */
+@media (max-width: 768px) {
+    .address-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .hobbies-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    body {
+        padding: 10px;
+    }
 }
