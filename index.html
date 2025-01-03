@@ -1,68 +1,73 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tự động hoàn thành địa điểm với Goong API</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        /* CSS cơ bản cho danh sách gợi ý */
-        .autocomplete-suggestions {
-            border: 1px solid #ccc;
-            max-height: 150px;
-            overflow-y: auto;
-            position: absolute;
-            z-index: 1000;
-            background-color: #fff;
-        }
-        .autocomplete-suggestion {
-            padding: 8px;
-            cursor: pointer;
-        }
-        .autocomplete-suggestion:hover {
-            background-color: #e9e9e9;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu bản thân</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Tự động hoàn thành địa điểm với Goong API</h1>
-    <input id="autocomplete" type="text" placeholder="Nhập địa chỉ" oninput="fetchSuggestions()">
-    <div id="suggestions" class="autocomplete-suggestions"></div>
+    <label for="ho-ten">Họ và tên:</label>
+    <input type="text" id="ho-ten" name="ho-ten"><br><br>
+    <label for="ngay-sinh">Ngày sinh:</label>
+    <input type="date" id="ngay-sinh" name="ngay-sinh"><br><br>
+    <label for="gioi-tinh">Giới tính:</label>
+    <input type="radio" id="nam" name="gioi-tinh" value="Nam">
+    <label for="nam">Nam</label>
+    <input type="radio" id="nu" name="gioi-tinh" value="Nữ">
+    <label for="nu">Nữ</label><br><br>
+    <label for="so-thich">Sở thích:</label>
+    <input type="checkbox" id="doc-sach" name="so-thich" value="Đọc sách">
+    <label for="doc-sach">Đọc sách</label>
+    <input type="checkbox" id="nghe-nhac" name="so-thich" value="Nghe nhạc">
+    <label for="nghe-nhac">Nghe nhạc</label><br><br>
+    <label for="dia-chi">Địa chỉ:</label>
+    <select id="tinh" name="tinh"></select>
+    <select id="huyen" name="huyen"></select>
+    <select id="xa" name="xa"></select><br><br>
+    <img src="image.png" alt="Ảnh">
+    <audio id="audio" src="sound.mp3" volume="0.1" autoplay></audio>
 
     <script>
-        const apiKey = 'YOUR_API_KEY'; // Thay thế bằng API key của bạn
+        fetch('location.json')
+            .then(response => response.json())
+            .then(data => {
+                const tinhSelect = document.getElementById('tinh');
+                const huyenSelect = document.getElementById('huyen');
+                const xaSelect = document.getElementById('xa');
 
-        function fetchSuggestions() {
-            const input = document.getElementById('autocomplete').value;
-            const suggestionsContainer = document.getElementById('suggestions');
-            suggestionsContainer.innerHTML = ''; // Xóa các gợi ý cũ
-
-            if (input.length < 3) {
-                return; // Không tìm kiếm nếu chuỗi nhập vào quá ngắn
-            }
-
-            const url = `https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${encodeURIComponent(input)}`;
-
-            axios.get(url)
-                .then(response => {
-                    const predictions = response.data.predictions;
-                    predictions.forEach(prediction => {
-                        const suggestionItem = document.createElement('div');
-                        suggestionItem.className = 'autocomplete-suggestion';
-                        suggestionItem.textContent = prediction.description;
-                        suggestionItem.onclick = () => selectSuggestion(prediction);
-                        suggestionsContainer.appendChild(suggestionItem);
-                    });
-                })
-                .catch(error => {
-                    console.error('Lỗi khi lấy gợi ý:', error);
+                data.forEach(tinh => {
+                    const option = document.createElement('option');
+                    option.value = tinh.code;
+                    option.text = tinh.name;
+                    tinhSelect.appendChild(option);
                 });
-        }
 
-        function selectSuggestion(prediction) {
-            document.getElementById('autocomplete').value = prediction.description;
-            document.getElementById('suggestions').innerHTML = ''; // Xóa gợi ý sau khi chọn
-            // Bạn có thể xử lý thêm thông tin về địa điểm tại đây, ví dụ như lấy chi tiết địa điểm
-        }
+                tinhSelect.addEventListener('change', (e) => {
+                    const tinhCode = e.target.value;
+                    const tinh = data.find(t => t.code == tinhCode);
+                    huyenSelect.innerHTML = '';
+                    tinh.districts.forEach(huyen => {
+                        const option = document.createElement('option');
+                        option.value = huyen.code;
+                        option.text = huyen.name;
+                        huyenSelect.appendChild(option);
+                    });
+                });
+
+                huyenSelect.addEventListener('change', (e) => {
+                    const huyenCode = e.target.value;
+                    const tinh = data.find(t => t.districts.find(h => h.code == huyenCode));
+                    const huyen = tinh.districts.find(h => h.code == huyenCode);
+                    xaSelect.innerHTML = '';
+                    huyen.wards.forEach(xa => {
+                        const option = document.createElement('option');
+                        option.value = xa.code;
+                        option.text = xa.name;
+                        xaSelect.appendChild(option);
+                    });
+                });
+            });
     </script>
 </body>
 </html>
