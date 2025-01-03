@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- thêm audio với autoplay và volume 10% tự động phát dưới nền khi mở web-->
+    <audio autoplay style="display: none;">
+        <source src="sound.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="container">
         <h1>🧑 Giới thiệu bản thân</h1>
         
@@ -85,13 +90,21 @@
 
         <div class="button-group">
             <button id="submit-btn" onclick="showResult()">✅ Xong</button>
-            <button id="view-source-btn" onclick="viewSource()">🔍 Xem nguồn trang</button>
+            <button id="view-source-btn" onclick="viewSource()">🔍xem nguồn trang</button>
         </div>
 
         <div id="result"></div>
+
+        <!-- Thêm hình ảnh vào cuối trang -->
+        <div style="text-align: center; margin-top: 20px;">
+            <img src="image.png" alt="Hình ảnh" style="max-width: 100%; height: auto;">
+        </div>
     </div>
-<!-- code javascript để lấy thông tin từ file json về địa chỉ tại vn -->
+
     <script>
+        // thiết lập âm lượng 10% cho audio
+        document.querySelector('audio').volume = 0.1;
+
         fetch('location.json')
             .then(response => response.json())
             .then(data => {
